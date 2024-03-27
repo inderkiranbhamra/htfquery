@@ -83,3 +83,7 @@ def send_personalized_text(name, email):
         server.starttls()
         server.login(sender_email, app_password)
         server.send_message(msg)
+
+
+if __name__ == '__main__':
+    app.run(debug=True)
