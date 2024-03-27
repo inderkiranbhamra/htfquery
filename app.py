@@ -9,16 +9,16 @@ CORS(app)
 
 allowed_origin = "https://hackthefest.in/"
 
-def validate_origin():
-    if request.headers.get("Origin") != allowed_origin:
-        return jsonify({"error": "Invalid origin"}), 403
+# def validate_origin():
+#     if request.headers.get("Origin") != allowed_origin:
+#         return jsonify({"error": "Invalid origin"}), 403
 
 @app.route('/submit_form', methods=['POST'])
 def submit_form():
-    # Validate origin
-    error_response = validate_origin()
-    if error_response:
-        return error_response
+    # # Validate origin
+    # error_response = validate_origin()
+    # if error_response:
+    #     return error_response
 
     # Get form data
     name = request.form.get('name')
@@ -31,8 +31,12 @@ def submit_form():
     # Send automated personalized text
     send_personalized_text(name, email)
 
-    # Return JSON response
-    return redirect("https://hackthefest.in/", code=302)
+    # Return JSON response with JavaScript for the pop-up dialogue box
+    response_data = {
+        'message': 'Your message has been sent!',
+        'script': 'alert("Your message has been sent!");'
+    }
+    return jsonify(response_data), 200
 
 
 def send_email(name, email, message):
@@ -79,6 +83,3 @@ def send_personalized_text(name, email):
         server.starttls()
         server.login(sender_email, app_password)
         server.send_message(msg)
-
-if __name__ == "__main__":
-    app.run()
